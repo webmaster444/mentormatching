@@ -1,0 +1,27 @@
+{% extends "admin_layout.html" %}
+
+{% block content %}
+<h2>Accounts</h2>
+<table class="table table-bordered table-hover text-center">
+  <thead>
+    <tr>
+      <th>User Id</th>
+      <th>Email</th>
+      <th>Name</th>      
+      <th>Mentor/Mentee</th>
+      <th>Date of Birth</th>      
+      <th>Country</th>      
+      <th>City</th>      
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users %}   
+  <tr>
+    {% for f in user %}
+    <td>{{f}}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

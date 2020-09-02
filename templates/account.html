@@ -1,0 +1,211 @@
+{% extends 'admin_layout.html' %}
+
+{% block content %}
+<div class="step active" id="step1">
+    <h3>Account</h3>
+    <div class="profile-section text-right">        
+        <a href="#" class="btn btn-solid btn-brown rounded-lg" id="edit_account">Manage Account</a>
+        <a href="#" class="btn btn-solid btn-brown rounded-lg hide" id="update_account">Save</a>
+    </div>
+    <div class="form-wrapper uneditable" id="account-info">
+        <form
+            class="form-wrapper"
+            name="account_form" 
+            method="POST" 
+            id="account_form"
+            action="{{ url_for('account_page') }}"
+            enctype="multipart/form-data"
+        >
+        <div class="step active" id="step1">        
+            {% if msg!=None %}
+                <div class="full alert-msg">
+                    {{msg}}
+                </div>            
+            {% endif %}
+            <div class="form-field full">
+                <label for="name">Mentor or Mentee<span class="required">*</span></label>
+                <div>
+                    <div class="full">
+                        <input type="radio" name="mentor_or_mentee" id="mentor" value="mentor" {% if "mentor"==role %}checked="checked" {% endif %} /> <label for ="mentor"> Mentor</label>
+                    </div>
+                    <div class="full">
+                        <input type="radio" name="mentor_or_mentee" id="mentee" value="mentee" {% if "mentee"==role %}checked="checked" {% endif %} /> <label for ="mentee"> Mentee</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-field full">
+                <label for="name">Name<span class="required">*</span></label>
+                <input class="element-border" type="text" id="name" name="name" placeholder="Your Name"
+                    autocomplete="given-name" required value="{{detail.name}}"/>
+            </div>
+            <div class="form-field full">
+                <label for="date_of_birth">Date of Birth<span class="required">*</span></label>
+                <input class="element-border" type="text" id="date_of_birth" name="date_of_birth" placeholder="mm/dd/yyyy"
+                    autocomplete="date" required value="{{detail.date_of_birth}}" />
+            </div>
+            <div class="form-field full" id="password-wrapper">
+                <label for="password">Password<span class="required">*</span></label>
+                <input class="element-border" type="password" id="password" name="password" placeholder="********"
+                    autocomplete="new-password" value="Password1" required />
+                <p class="error-msg"></p>
+            </div>
+            <div class="form-field full">
+                <label for="country_of_residence">Country of Residence<span class="required">*</span></label>
+                <input class="element-border" type="text" id="country_of_residence" name="country_of_residence" placeholder="Country Of Residence"
+                    autocomplete="organization"  value="{{detail.country_of_residence}}" required/>
+            </div>
+            <div class="form-field full">
+                <label for="address">City of Residence<span class="required">*</span></label>
+                <input class="element-border" type="text" id="city_of_residence" name="city_of_residence" placeholder="City of Residence"
+                    autocomplete="city-residence" value="{{detail.city_of_residence}}" required/>
+            </div>
+            <div class="form-field full">
+                <label for="phoneno">Phone Number<span class="required">*</span></label>
+                <input class="element-border" type="text" id="phoneno" name="phoneno" placeholder="555 55 55555"
+                    autocomplete="mobile" value="{{detail.phoneno}}" required/>
+            </div>        
+            <div class="form-field full">
+                <label for="phoneno">Preferred language<span class="required">*</span></label>
+                <select class="element-border" id="preferred_language" name="preferred_language">
+                    {% for each in [
+                        "English",
+                        "French",
+                        "Russian"
+                    ] %}
+                    <option value="{{each}}" {% if detail.preferred_language == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>        
+            <div class="form-field full">
+                <label for="phoneno">Number of years of work experience<span class="required">*</span></label>
+                <input class="element-border" type="text" id="years_of_experience" name="years_of_experience" placeholder="6" autocomplete="mobile" value="{{detail.years_of_experience}}" required/>
+            </div>              
+            <div class="form-field full">
+                <label for="field_of_expertise">Field of expertise ( choose one) <span class="required">*</span></label>
+                <select class="element-border" id="field_of_expertise" name="field_of_expertise">
+                    {% for each in expertises %}
+                    <option value="{{each}}" {% if detail.field_of_expertise == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>   
+            <div class="clearfix"></div>
+            <div class="form-field full">
+                <label for="before_mentor">I had a mentor before</label>
+                <input class="element-border" type="checkbox" id="before_mentor" name="before_mentor" placeholder="6" autocomplete="mobile" value=1 {% if detail.before_mentor == 1 %} checked="checked" {% endif %}/>
+            </div>              
+            <div class="form-field full">
+                <label for="career">Career</label>
+                <div>
+                    {% for each in careers %}
+                    <div class="full">
+                        <input type="checkbox" name="career" value="{{each}}" {% if each in cu_career %}checked="checked" {% endif %} />{{each}}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>           
+            <div class="form-field full">
+                <label for="empowerment">Empowerment</label>
+                <div>
+                    {% for each in empowerments %}
+                    <div class="full">
+                    <input type="checkbox" name="empowerment" value="{{each}}" {% if each in cu_empowerment %}checked="checked" {% endif %} />{{each}}
+                </div>
+                    {% endfor %}
+                </div>
+            </div>           
+            <div class="form-field full">
+                <label for="education">Education</label>
+                <div>
+                    {% for each in educations %}
+                    <div class="full">
+                    <input type="checkbox" name="education" value="{{each}}" {% if each in cu_education %}checked="checked" {% endif %} />{{each}}
+                </div>
+                    {% endfor %}
+                </div>
+            </div>           
+            <div class="form-field full">
+                <label for="family">Family</label>
+                <div>
+                    {% for each in family %}
+                    <div class="full">
+                    <input type="checkbox" name="family" value="{{each}}" {% if each in cu_family %}checked="checked" {% endif %} />{{each}}
+                </div>
+                    {% endfor %}
+                </div>
+            </div>           
+            <div class="form-field full">
+                <label for="personal_skills">Personal Skills</label>
+                <div>
+                    {% for each in personal_skills %}
+                    <div class="full">
+                    <input type="checkbox" name="personal_skills" value="{{each}}" {% if each in cu_personal_skill %}checked="checked" {% endif %} />{{each}}
+                </div>
+                    {% endfor %}
+                </div>
+            </div>           
+            <div class="form-field full">
+                <label for="funding">Funding</label>
+                <div>
+                    {% for each in fundings %}
+                    <div class="full">
+                    <input type="checkbox" name="funding" value="{{each}}" {% if each in cu_funding %}checked="checked" {% endif %} />{{each}}
+                </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-field full">
+                <label for="highest_education_level">My highest education level<span class="required">*</span></label>
+                <select class="element-border" id="highest_education_level" name="highest_education_level">
+                    {% for each in education_levels %}
+                    <option value="{{each}}"{% if detail.highest_education_level == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>   
+            <div class="form-field full">
+                <label for="corporate_business_position">I work in the following corporate business position<span class="required">*</span></label>
+                <select class="element-border" id="corporate_business_position" name="corporate_business_position">
+                    {% for each in corporate_business %}
+                    <option value="{{each}}" {% if detail.corporate_business_position == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>   
+            <div class="form-field full">
+                <label for="work_as_entrepreneur">I work as an entrepeneur in a <span class="required">*</span></label>
+                <select class="element-border" id="work_as_entrepreneur" name="work_as_entrepreneur">
+                    {% for each in entrepreneurs %}
+                    <option value="{{each}}" {% if detail.work_as_entrepreneur == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>   
+            <div class="form-field full">
+                <label for="personality_type">My Myers-Briggs Personality Type is<span class="required">*</span></label>
+                <select class="element-border" id="personality_type" name="personality_type">
+                    {% for each in personality_types %}
+                    <option value="{{each}}" {% if detail.personality_type == each %} selected="selected" {% endif %}>{{each}}</option>
+                    {% endfor %}
+                </select>
+            </div>   
+            <div class="clearfix"></div>            
+        </div>            
+        </form> 
+        <div class="matches">
+            <h2> Your {% if "mentor"==role %} Mentee {% else %} Mentor {% endif %} </h2>
+            <a href="#" class="btn btn-solid btn-brown rounded-lg" id="find_matches">Find Matches</a>
+            <br/>
+            {% if assigned==[] %}
+                <p>Sorry, but no matches</p>
+            {% else %}
+                <ul id="matches">
+                    {% for each in assigned %}
+                        <li>
+                        {% for i in each %}
+                            {{i}}
+                        {% endfor %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
